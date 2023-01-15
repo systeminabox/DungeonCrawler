@@ -27,6 +27,7 @@ public class MoveCamera : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        /*
         //Debug.Log(targetX + " , " + targetY);
         //check X and Y posistion to target and update accordingly
         if (transform.position.x < targetX)
@@ -71,6 +72,7 @@ public class MoveCamera : MonoBehaviour
         {
             transform.position = new Vector3(targetX, transform.position.y, transform.position.z);
         }
+        */
     }
     public void ChangeTargetPos(string str)
     {
