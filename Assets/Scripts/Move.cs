@@ -25,15 +25,27 @@ public class Move : MonoBehaviour
     public float mouseY = 0.0f;
     private Vector2 worldPosition = Vector2.zero;
 
+    //prevents using attacks
+    private float attackDelay = 0.0f;
+    //works as a percentage. reduces the attackDelay * (1 - attackSpeed)
+    public float attackSpeed = 0.0f;
+    //used for left-right swinging. if hitcount is 1 and equipped weapon is Sword, increase attackDelay.
+    int hitCount;
+    //base cooldown between attacks.
+    public float baseAttackTime = 1.0f;
+
     float horizontal;
     float vertical;
-
+    
+    //is the player holding their sword?
     public bool hasSword = true;
-
+    //is the player using their weapon?
+    public bool isSwingin = false;
     private void Start()
     {
         plr = GetComponent<Rigidbody2D>();
     }
+    //function used to throw the sword. A is MouseX and B is MouseY with the power being the force the projectile is launched with.
     void Launch(float a, float b, float power)
     {
         GameObject clone;
@@ -50,9 +62,9 @@ public class Move : MonoBehaviour
         pb.speed = Mathf.Min(Mathf.Max(15.0f,(power*2.0f) * 40.0f), 120.0f);
         clone.transform.parent = null;
         updater.UpdateSword();
-
         Debug.Log("created clone @ " +transform.position + "with rotation " +rot + " with power " +power);
     }
+    //creates the swing projectile
     void Attack(float a, float b)
     {
         GameObject clone;
@@ -64,9 +76,10 @@ public class Move : MonoBehaviour
         clone.transform.position = pos;
         float rot = Mathf.Atan2(a - pos.x, b - pos.y) * Mathf.Rad2Deg;
         clone.transform.localRotation = Quaternion.Euler(new Vector3(0, 0, -rot - 45));
-        clone.GetComponent<SwingAttack>().initAngle = clone.transform.rotation.z;
+        clone.GetComponent<SwingAttack>().initAngle = -rot - 45;
+        attackDelay = baseAttackTime * (1.0f - attackSpeed);
     }
-    //throwing the sword stops movement, but has like no wind up
+    //Update method
     void Update()
     {
         //Movement
@@ -79,7 +92,7 @@ public class Move : MonoBehaviour
         mousePos.z = Camera.main.nearClipPlane;
         worldPosition = Camera.main.ScreenToWorldPoint(mousePos);
 
-        
+        //restricts actions when the player starts charging up the sword throw.
         if (isChargingUp == true)
         {
             //Cancles the input
@@ -97,51 +110,58 @@ public class Move : MonoBehaviour
                 hasSword = false;
                 charge = 0;
             }
-            
         }
+        //Lets the player weapon actions
         if (hasSword == true)
         {
-            if (Input.GetKeyDown(KeyCode.Mouse0))
+            if (Input.GetKey(KeyCode.Mouse0) && isChargingUp == false && isSwingin == false )
             {
                 Attack(worldPosition.x, worldPosition.y);
+                isSwingin = true;
             }
             if (Input.GetKeyDown(KeyCode.Mouse1))
             {
                 isChargingUp = true;
             }
-            if (Input.GetKey(KeyCode.Mouse1) && isChargingUp == true)
+            if (Input.GetKey(KeyCode.Mouse1) && isChargingUp == true && isSwingin == false)
             {
-                //if (charge <= chargeMax)
-                //{
+                //charge sword throw
                 charge += chargeRate * Time.deltaTime;
-                //Debug.Log("charge is " + charge);
-               // }
+                //throw overcharged sword
                 if (charge > chargeMax + 3)
                 {
                 Launch(worldPosition.x, worldPosition.y, charge);
                     hasSword = false;
                     charge = 0;
-                //Debug.Log(+worldPosition.x + ", " + worldPosition.y);
-                //charge = 0;
                 }
             }
         }
     }
     private void FixedUpdate()
     {
-        if (isChargingUp == false)
+        //stops movement when swinging or charging throw
+        if (isChargingUp == true || isSwingin == true)
         {
-            if (horizontal != 0 && vertical != 0) //reduces movement speed by 30% when moving diagonally
+            horizontal = 0;
+            vertical = 0;
+        }
+        //reduces movement speed by 30% when moving diagonally
+        if (isChargingUp == false && isSwingin == false)
+        {
+            if (horizontal != 0 && vertical != 0) 
             {
                 horizontal *= 0.7f;
                 vertical *= 0.7f;
             }
-            plr.velocity = new Vector2(horizontal * speed, vertical * speed);
+            
         }
+        //update position
+        plr.velocity = new Vector2(horizontal * speed, vertical * speed);
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
         Debug.Log("Hit trigger " + collision.name);
+        //Pick up the sword
         if (collision.name == "ReturnSword(Clone)")
         {
             hasSword = true;
