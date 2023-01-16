@@ -23,6 +23,6 @@ public class ReturnSword : MonoBehaviour
         //this functionality is kinda cool.
         float rot = Mathf.Atan2(plr.transform.position.x - pos.x, plr.transform.position.y - pos.y) * Mathf.Rad2Deg;
         body.rotation = -rot;
-        body.AddForce(transform.up * (5.0f * Time.deltaTime), ForceMode2D.Impulse);
+        body.transform.position += transform.up * (20.0f * Time.deltaTime);
     }
 }

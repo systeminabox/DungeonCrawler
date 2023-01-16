@@ -19,6 +19,7 @@ public class Move : MonoBehaviour
     Rigidbody2D plr;
     public GameObject Projectile;
     public GameObject Player;
+    public GameObject Swing;
     public UIUpdater updater;
     public float mouseX = 0.0f;
     public float mouseY = 0.0f;
@@ -52,7 +53,19 @@ public class Move : MonoBehaviour
 
         Debug.Log("created clone @ " +transform.position + "with rotation " +rot + " with power " +power);
     }
-
+    void Attack(float a, float b)
+    {
+        GameObject clone;
+        Rigidbody2D hitbox;
+        Vector3 pos = transform.position;
+        clone = Instantiate(Swing, transform);
+        hitbox = clone.GetComponent<Rigidbody2D>();
+        clone.SetActive(true);
+        clone.transform.position = pos;
+        float rot = Mathf.Atan2(a - pos.x, b - pos.y) * Mathf.Rad2Deg;
+        clone.transform.localRotation = Quaternion.Euler(new Vector3(0, 0, -rot - 45));
+        clone.GetComponent<SwingAttack>().initAngle = clone.transform.rotation.z;
+    }
     //throwing the sword stops movement, but has like no wind up
     void Update()
     {
@@ -88,6 +101,10 @@ public class Move : MonoBehaviour
         }
         if (hasSword == true)
         {
+            if (Input.GetKeyDown(KeyCode.Mouse0))
+            {
+                Attack(worldPosition.x, worldPosition.y);
+            }
             if (Input.GetKeyDown(KeyCode.Mouse1))
             {
                 isChargingUp = true;

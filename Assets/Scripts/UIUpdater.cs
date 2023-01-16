@@ -55,6 +55,6 @@ public class UIUpdater : MonoBehaviour
             greyOut.transform.position = new Vector3(xOffset, greyOut.transform.position.y, 0.0f);
         }
         pos = greyOut.transform.position;
-        swordMask.transform.position = new Vector3(pos.x, greyOut.transform.position.y + (Mathf.Min(((Player.GetComponent<Move>().charge / Player.GetComponent<Move>().chargeMax) * 100.0f), 100.0f) - 100.0f), 0.0f);
+        swordMask.transform.position = new Vector3(pos.x, greyOut.transform.position.y + (Mathf.Min(((Player.GetComponent<Move>().charge / Player.GetComponent<Move>().chargeMax) * 50.0f), 50.0f) - 50.0f), 0.0f);
     }
 }
