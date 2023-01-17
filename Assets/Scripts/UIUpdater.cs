@@ -65,7 +65,7 @@ public class UIUpdater : MonoBehaviour
         swordMask.transform.position = new Vector3(pos.x, greyOut.transform.position.y + (Mathf.Min(((Player.GetComponent<Move>().charge / Player.GetComponent<Move>().chargeMax) * 50.0f), 50.0f) - 50.0f), 0.0f);
     }
 
-    void SpawnUpgrades()
+    public void SpawnUpgrades()
     {
         GameObject clone;
         //creates 3 UpgradeCard objects, positioning them from left to right

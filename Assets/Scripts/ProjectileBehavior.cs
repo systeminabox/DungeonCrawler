@@ -21,7 +21,7 @@ public class ProjectileBehavior : MonoBehaviour
     public GameObject projectile;
     public GameObject spinner;
     public GameObject sword;
-    GameObject light;
+    private GameObject light;
     public int rotation = 0;
     public bool real = false;
     bool hitWall = false;

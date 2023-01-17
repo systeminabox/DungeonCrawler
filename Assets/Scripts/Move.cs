@@ -22,7 +22,12 @@ public class Move : MonoBehaviour
     public GameObject Player;
     public GameObject Swing;
     public GameObject OtherSwing;
+    //add specific weapon classes that are invoked using equippedWeapon.Primary or equippedWeapon.Secondary
+    //attack chains are in the weapon's class
+    public GameObject equippedWeapon;
+    //used for UI updates
     public UIUpdater updater;
+    //gets the mouse position
     public float mouseX = 0.0f;
     public float mouseY = 0.0f;
     private Vector2 worldPosition = Vector2.zero;
