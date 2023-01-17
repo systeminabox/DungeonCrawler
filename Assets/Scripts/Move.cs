@@ -1,3 +1,4 @@
+using Codice.CM.Common;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -20,6 +21,7 @@ public class Move : MonoBehaviour
     public GameObject Projectile;
     public GameObject Player;
     public GameObject Swing;
+    public GameObject OtherSwing;
     public UIUpdater updater;
     public float mouseX = 0.0f;
     public float mouseY = 0.0f;
@@ -30,9 +32,10 @@ public class Move : MonoBehaviour
     //works as a percentage. reduces the attackDelay * (1 - attackSpeed)
     public float attackSpeed = 0.0f;
     //used for left-right swinging. if hitcount is 1 and equipped weapon is Sword, increase attackDelay.
-    int hitCount;
-    //base cooldown between attacks.
-    public float baseAttackTime = 1.0f;
+    public int hitCount;
+    public int hitMax = 1;
+    //base cooldown between attacks in seconds
+    public float baseAttackTime = 0.50f;
 
     float horizontal;
     float vertical;
@@ -64,8 +67,9 @@ public class Move : MonoBehaviour
         updater.UpdateSword();
         Debug.Log("created clone @ " +transform.position + "with rotation " +rot + " with power " +power);
     }
+
     //creates the swing projectile
-    void Attack(float a, float b)
+    void Attack(float a, float b, int hitNumber)
     {
         GameObject clone;
         Rigidbody2D hitbox;
@@ -75,9 +79,23 @@ public class Move : MonoBehaviour
         clone.SetActive(true);
         clone.transform.position = pos;
         float rot = Mathf.Atan2(a - pos.x, b - pos.y) * Mathf.Rad2Deg;
-        clone.transform.localRotation = Quaternion.Euler(new Vector3(0, 0, -rot - 45));
-        clone.GetComponent<SwingAttack>().initAngle = -rot - 45;
-        attackDelay = baseAttackTime * (1.0f - attackSpeed);
+        clone.transform.localRotation = Quaternion.Euler(new Vector3(0, 0, -rot + ((90 * hitNumber)- 45)));
+        clone.GetComponent<SwingAttack>().initAngle = -rot + ((90 * hitNumber)- 45);
+        clone.GetComponent<SwingAttack>().hitCount = hitNumber;
+    }
+    void Attack1(float a, float b, int hitNumber)
+    {
+        GameObject clone;
+        Rigidbody2D hitbox;
+        Vector3 pos = transform.position;
+        clone = Instantiate(OtherSwing, transform);
+        hitbox = clone.GetComponent<Rigidbody2D>();
+        clone.SetActive(true);
+        clone.transform.position = pos;
+        float rot = Mathf.Atan2(a - pos.x, b - pos.y) * Mathf.Rad2Deg;
+        clone.transform.localRotation = Quaternion.Euler(new Vector3(0, 0, -rot + ((90 * hitNumber) - 45)));
+        clone.GetComponent<SwingOtherWay>().initAngle = -rot + ((90 * hitNumber) - 45);
+        clone.GetComponent<SwingOtherWay>().hitCount = hitNumber;
     }
     //Update method
     void Update()
@@ -91,6 +109,11 @@ public class Move : MonoBehaviour
         Vector3 mousePos = Input.mousePosition;
         mousePos.z = Camera.main.nearClipPlane;
         worldPosition = Camera.main.ScreenToWorldPoint(mousePos);
+        //cooldown attack
+        if (attackDelay >= 0)
+        {
+            attackDelay -= 1 * Time.deltaTime;
+        }
 
         //restricts actions when the player starts charging up the sword throw.
         if (isChargingUp == true)
@@ -112,17 +135,34 @@ public class Move : MonoBehaviour
             }
         }
         //Lets the player weapon actions
-        if (hasSword == true)
+        if (hasSword == true && attackDelay <= 0)
         {
+            //basic attack
             if (Input.GetKey(KeyCode.Mouse0) && isChargingUp == false && isSwingin == false )
             {
-                Attack(worldPosition.x, worldPosition.y);
-                isSwingin = true;
+               
+                
+                if(hitCount < hitMax)
+                {
+                    Attack(worldPosition.x, worldPosition.y, 0);
+                    isSwingin = true;
+                    attackDelay = (baseAttackTime * (1.0f - attackSpeed)) * 1.0f;
+                    hitCount += 1;
+                }
+                else
+                {
+                    Attack1(worldPosition.x, worldPosition.y, 1);
+                    isSwingin = true;
+                    attackDelay = (baseAttackTime * (1.0f - attackSpeed)) * 2.0f;
+                    hitCount = 0;
+                }
+                
             }
             if (Input.GetKeyDown(KeyCode.Mouse1))
             {
                 isChargingUp = true;
             }
+            //secondary attack
             if (Input.GetKey(KeyCode.Mouse1) && isChargingUp == true && isSwingin == false)
             {
                 //charge sword throw

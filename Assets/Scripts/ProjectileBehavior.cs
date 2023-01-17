@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading;
 //using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.Experimental.GlobalIllumination;
 using UnityEngine.UIElements;
 using static UnityEditor.PlayerSettings;
 
@@ -20,6 +21,7 @@ public class ProjectileBehavior : MonoBehaviour
     public GameObject projectile;
     public GameObject spinner;
     public GameObject sword;
+    GameObject light;
     public int rotation = 0;
     public bool real = false;
     bool hitWall = false;
@@ -78,6 +80,8 @@ public class ProjectileBehavior : MonoBehaviour
             {
                 floorAge += 1;
                 body.rotation += (Mathf.Max(1000.0f - floorAge, 0)) * Time.deltaTime;
+                light = projectile.transform.Find("Glow").gameObject;
+                light.GetComponent<Light>().spotAngle = (floorAge / 1500) * 30;
             }
             //fires once
             if (floorAge >= 1500.0f)
