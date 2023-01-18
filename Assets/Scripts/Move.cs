@@ -49,6 +49,17 @@ public class Move : MonoBehaviour
     public bool hasSword = true;
     //is the player using their weapon?
     public bool isSwingin = false;
+    //disable the input of the player when true;
+    public bool disableInput = false;
+    //stats
+    public int Health;
+    public int Damage;
+
+    public float IFrames;
+    public float Area;
+    public float Speed;
+    public float Range;
+
     private void Start()
     {
         plr = GetComponent<Rigidbody2D>();
@@ -105,6 +116,7 @@ public class Move : MonoBehaviour
     //Update method
     void Update()
     {
+
         //Movement
         horizontal = Input.GetAxisRaw("Horizontal");
         vertical = Input.GetAxisRaw("Vertical");
@@ -119,7 +131,7 @@ public class Move : MonoBehaviour
         {
             attackDelay -= 1 * Time.deltaTime;
         }
-
+        if (disableInput == false){ 
         //restricts actions when the player starts charging up the sword throw.
         if (isChargingUp == true)
         {
@@ -143,25 +155,25 @@ public class Move : MonoBehaviour
         if (hasSword == true && attackDelay <= 0)
         {
             //basic attack
-            if (Input.GetKey(KeyCode.Mouse0) && isChargingUp == false && isSwingin == false )
+            if (Input.GetKey(KeyCode.Mouse0) && isChargingUp == false && isSwingin == false)
             {
-               
-                
-                if(hitCount < hitMax)
+
+
+                if (hitCount < hitMax)
                 {
                     Attack(worldPosition.x, worldPosition.y, 0);
                     isSwingin = true;
-                    attackDelay = (baseAttackTime * (1.0f - attackSpeed)) * 1.0f;
+                    attackDelay = (baseAttackTime * (1.0f - attackSpeed)) * 0.50f;
                     hitCount += 1;
                 }
                 else
                 {
                     Attack1(worldPosition.x, worldPosition.y, 1);
                     isSwingin = true;
-                    attackDelay = (baseAttackTime * (1.0f - attackSpeed)) * 2.0f;
+                    attackDelay = (baseAttackTime * (1.0f - attackSpeed)) * 1.0f;
                     hitCount = 0;
                 }
-                
+
             }
             if (Input.GetKeyDown(KeyCode.Mouse1))
             {
@@ -175,17 +187,18 @@ public class Move : MonoBehaviour
                 //throw overcharged sword
                 if (charge > chargeMax + 3)
                 {
-                Launch(worldPosition.x, worldPosition.y, charge);
+                    Launch(worldPosition.x, worldPosition.y, charge);
                     hasSword = false;
                     charge = 0;
                 }
             }
         }
     }
+    }
     private void FixedUpdate()
     {
         //stops movement when swinging or charging throw
-        if (isChargingUp == true || isSwingin == true)
+        if (isChargingUp == true || isSwingin == true || disableInput == true)
         {
             horizontal = 0;
             vertical = 0;

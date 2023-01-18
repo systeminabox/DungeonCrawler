@@ -26,7 +26,7 @@ public class UpgradeCardBehavior : MonoBehaviour, IPointerEnterHandler, IPointer
     void Start()
     {
         upgradeID = UnityEngine.Random.Range(0, 4);
-        
+        //add some sort of wait method either here or before the card spawns
         desc = card.transform.Find("Description").gameObject;
         desc.GetComponent<TextMeshProUGUI>().text = "upgrade" + upgradeID + "_desc";
         cardname = card.transform.Find("CardName").gameObject;
@@ -50,6 +50,11 @@ public class UpgradeCardBehavior : MonoBehaviour, IPointerEnterHandler, IPointer
                 card.transform.localScale = new Vector3(1 * (1 + scaleUp), 2 * (1 + scaleUp), 1.0f);
                 scaleUp += 1f * Time.deltaTime;
             }
+            if (Input.GetKeyUp(KeyCode.Mouse0))
+            {
+                Debug.Log("Selected upgrade " + cardname + " with tier " + tier);
+                card.transform.parent.GetComponent<UIUpdater>().KillUpgrades();
+            }
         }
         if (card.GetComponent<UpgradeCardBehavior>().mouseOver == false)
         {
@@ -59,6 +64,8 @@ public class UpgradeCardBehavior : MonoBehaviour, IPointerEnterHandler, IPointer
                 scaleUp -= 1f * Time.deltaTime;
             }
         }
+        
+        
     }
     public void OnPointerEnter(PointerEventData eventData)
     {

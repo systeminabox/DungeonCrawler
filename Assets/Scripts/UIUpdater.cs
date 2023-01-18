@@ -81,8 +81,24 @@ public class UIUpdater : MonoBehaviour
             desc.GetComponent<TextMeshProUGUI>().color = new Color(1,1,1,0);
             cardname = card.transform.Find("CardName").gameObject;
             cardname.GetComponent<TextMeshProUGUI>().color = new Color(1, 1, 1, 0);
-
+            Player.GetComponent<Move>().disableInput = true;
         }
     }
-    
+    public void KillUpgrades()
+    {
+        //GameObject child;
+        for (int i = 0; i < GameObject.Find("Canvas").gameObject.transform.childCount; i++)
+        {
+            GameObject child = GameObject.Find("Canvas").gameObject.transform.GetChild(i).gameObject;
+            if (child.name == card.name + "(Clone)")
+            {
+                Destroy(child);
+            }
+            
+        }
+        Player.GetComponent<Move>().disableInput = false;
+        //loop for each child Card and kill them
+        //Destroy(card);
+
+    }
 }
