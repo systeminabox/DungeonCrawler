@@ -56,9 +56,9 @@ public class Move : MonoBehaviour
     public int Damage;
 
     public float IFrames;
-    public float Area;
-    public float Speed;
-    public float Range;
+    public int Area;
+    public int Speed;
+    public int Range;
 
     private void Start()
     {
@@ -76,6 +76,7 @@ public class Move : MonoBehaviour
         clone.transform.position = pos;
         float rot = Mathf.Atan2(a - pos.x,b - pos.y) * Mathf.Rad2Deg;
         hitbox.transform.rotation = Quaternion.Euler(new Vector3(0, 0, -rot));
+        clone.transform.localScale = new Vector3(1.0f + (float)(0.1f * Area), 1.0f + (float)(0.1f * Area));
         ProjectileBehavior pb = clone.GetComponent<ProjectileBehavior>();
         //min(max(minpower, (power*2) * 40.0f), maxpower)
         pb.speed = Mathf.Min(Mathf.Max(15.0f,(power*2.0f) * 40.0f), 120.0f);
@@ -96,6 +97,7 @@ public class Move : MonoBehaviour
         clone.transform.position = pos;
         float rot = Mathf.Atan2(a - pos.x, b - pos.y) * Mathf.Rad2Deg;
         clone.transform.localRotation = Quaternion.Euler(new Vector3(0, 0, -rot + ((90 * hitNumber)- 45)));
+        clone.transform.localScale = new Vector3(1.0f + (float)(0.1f * Area), 1.0f + (float)(0.1f * Area));
         clone.GetComponent<SwingAttack>().initAngle = -rot + ((90 * hitNumber)- 45);
         clone.GetComponent<SwingAttack>().hitCount = hitNumber;
     }
@@ -110,6 +112,7 @@ public class Move : MonoBehaviour
         clone.transform.position = pos;
         float rot = Mathf.Atan2(a - pos.x, b - pos.y) * Mathf.Rad2Deg;
         clone.transform.localRotation = Quaternion.Euler(new Vector3(0, 0, -rot + ((90 * hitNumber) - 45)));
+        clone.transform.localScale = new Vector3(1.0f + (float)(0.1f * Area), 1.0f + (float)(0.1f * Area));
         clone.GetComponent<SwingOtherWay>().initAngle = -rot + ((90 * hitNumber) - 45);
         clone.GetComponent<SwingOtherWay>().hitCount = hitNumber;
     }
@@ -214,7 +217,7 @@ public class Move : MonoBehaviour
             
         }
         //update position
-        plr.velocity = new Vector2(horizontal * speed, vertical * speed);
+        plr.velocity = new Vector2(horizontal * (float)(speed + Speed), vertical * (float)(speed+Speed));
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {

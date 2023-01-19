@@ -16,7 +16,7 @@ public class UpgradeCardBehavior : MonoBehaviour, IPointerEnterHandler, IPointer
     public int upgradeID = 0;
     public string upgrade = "Blade";
 
-    string[] listUpgradeNames = new string[] {"Blade", "Speed", "Haste", "Health", "Evasion"};
+    string[] listUpgradeNames = new string[] {"Attack", "Speed", "Haste", "Health", "Area"};
 
     GameObject desc;
     GameObject cardname;
@@ -28,9 +28,9 @@ public class UpgradeCardBehavior : MonoBehaviour, IPointerEnterHandler, IPointer
         upgradeID = UnityEngine.Random.Range(0, 4);
         //add some sort of wait method either here or before the card spawns
         desc = card.transform.Find("Description").gameObject;
-        desc.GetComponent<TextMeshProUGUI>().text = "upgrade" + upgradeID + "_desc";
+        desc.GetComponent<TextMeshProUGUI>().text = "upgrade" + listUpgradeNames[upgradeID] + "_desc";
         cardname = card.transform.Find("CardName").gameObject;
-        cardname.GetComponent<TextMeshProUGUI>().text = "upgrade" + upgradeID;
+        cardname.GetComponent<TextMeshProUGUI>().text = "upgrade" + listUpgradeNames[upgradeID];
         card.GetComponent<UpgradeCardBehavior>().tier = UnityEngine.Random.Range(0, 2);
         cardname.GetComponent<LocalizeStringEvent>().StringReference.TableEntryReference = cardname.GetComponent<TextMeshProUGUI>().text;
         desc.GetComponent<LocalizeStringEvent>().StringReference.TableEntryReference = desc.GetComponent<TextMeshProUGUI>().text;

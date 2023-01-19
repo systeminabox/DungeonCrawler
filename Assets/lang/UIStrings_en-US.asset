@@ -39,7 +39,8 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 1773098213376
-    m_Localized: Hastens your swings, letting you attack faster.
+    m_Localized: Hastens your actions, letting you attack, recover, and interract
+      faster.
     m_Metadata:
       m_Items: []
   - m_Id: 1973921488896
@@ -51,11 +52,11 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 2280034377728
-    m_Localized: Evasion
+    m_Localized: Area
     m_Metadata:
       m_Items: []
   - m_Id: 2308350124032
-    m_Localized: Increases immunity duration after taking damage.
+    m_Localized: Increases size of attacks.
     m_Metadata:
       m_Items: []
   references:

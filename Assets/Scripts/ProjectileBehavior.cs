@@ -21,7 +21,7 @@ public class ProjectileBehavior : MonoBehaviour
     public GameObject projectile;
     public GameObject spinner;
     public GameObject sword;
-    private GameObject light;
+    //private GameObject light;
     public int rotation = 0;
     public bool real = false;
     bool hitWall = false;
@@ -58,6 +58,10 @@ public class ProjectileBehavior : MonoBehaviour
 
             //trail.emitting = false;
         }
+        if (collision.gameObject.tag == "Enemy" && hitWall == false)
+        {
+            Debug.Log("Hit enemy " + collision.gameObject.name + " for " + (int)((plr.GetComponent<Move>().Damage + 3) * 1.5) + " damage");
+        }
 
     }
 
@@ -78,10 +82,11 @@ public class ProjectileBehavior : MonoBehaviour
             //projectile.transform.position += transform.up * (speed*Time.deltaTime);
             if (hitWall == true)
             {
+                
                 floorAge += 1;
                 body.rotation += (Mathf.Max(1000.0f - floorAge, 0)) * Time.deltaTime;
-                light = projectile.transform.Find("Glow").gameObject;
-                light.GetComponent<Light>().spotAngle = (floorAge / 1500) * 30;
+                //light = projectile.transform.Find("Glow").gameObject;
+                //light.GetComponent<Light>().spotAngle = (floorAge / 1500) * 30;
             }
             //fires once
             if (floorAge >= 1500.0f)
@@ -89,6 +94,7 @@ public class ProjectileBehavior : MonoBehaviour
                 rtrnSword = Instantiate(sword);
                 rtrnSword.transform.position = transform.position;
                 rtrnSword.SetActive(true);
+                rtrnSword.transform.localScale = new Vector3(1.0f + (float)(0.1f * plr.GetComponent<Move>().Area), 1.0f + (float)(0.1f * plr.GetComponent<Move>().Area));
                 Destroy(projectile);
                 /*Vector3 pos = transform.position;
                 plr = GameObject.Find("Player");

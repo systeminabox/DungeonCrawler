@@ -16,43 +16,43 @@ MonoBehaviour:
   m_TableCollectionNameGuidString: 1c4850a8d58b2a34eaf53fe857a6bc7c
   m_Entries:
   - m_Id: 15567396864
-    m_Key: upgrade0
+    m_Key: upgradeAttack
     m_Metadata:
       m_Items: []
   - m_Id: 1276228378624
-    m_Key: upgrade0_desc
+    m_Key: upgradeAttack_desc
     m_Metadata:
       m_Items: []
   - m_Id: 1464263221248
-    m_Key: upgrade1
+    m_Key: upgradeSpeed
     m_Metadata:
       m_Items: []
   - m_Id: 1487482888192
-    m_Key: upgrade1_desc
+    m_Key: upgradeSpeed_desc
     m_Metadata:
       m_Items: []
   - m_Id: 1691862933504
-    m_Key: upgrade2
+    m_Key: upgradeHaste
     m_Metadata:
       m_Items: []
   - m_Id: 1773098213376
-    m_Key: upgrade2_desc
+    m_Key: upgradeHaste_desc
     m_Metadata:
       m_Items: []
   - m_Id: 1973921488896
-    m_Key: upgrade3
+    m_Key: upgradeHealth
     m_Metadata:
       m_Items: []
   - m_Id: 2001297711104
-    m_Key: upgrade3_desc
+    m_Key: upgradeHealth_desc
     m_Metadata:
       m_Items: []
   - m_Id: 2280034377728
-    m_Key: upgrade4
+    m_Key: upgradeArea
     m_Metadata:
       m_Items: []
   - m_Id: 2308350124032
-    m_Key: upgrade4_desc
+    m_Key: upgradeArea_desc
     m_Metadata:
       m_Items: []
   m_Metadata:

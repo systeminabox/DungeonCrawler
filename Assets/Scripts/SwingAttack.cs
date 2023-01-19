@@ -18,6 +18,15 @@ public class SwingAttack : MonoBehaviour
         //initAngle = transform.rotation.z;
     }
 
+    void OnCollisionEnter2D(Collision2D collision)
+    {
+       
+        if (collision.gameObject.tag == "Enemy")
+        {
+            Debug.Log("Hit enemy " + collision.gameObject.name + " for " + (int)((player.GetComponent<Move>().Damage + 3)) + " damage");
+        }
+
+    }
     // Update is called once per frame
     void Update()
     {
